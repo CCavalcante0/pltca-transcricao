@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Transcrição</title>
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+
+:root {
+  --blue:   #007AFF;
+  --blue-h: #0066D6;
+  --green:  #34C759;
+  --red:    #FF3B30;
+
+  --glass:      rgba(255,255,255,0.62);
+  --glass-edge: rgba(255,255,255,0.88);
+  --glass-top:  rgba(255,255,255,0.96);
+  --glass-blur: blur(28px) saturate(180%);
+  --shadow:     0 8px 32px rgba(0,0,0,0.09), 0 2px 6px rgba(0,0,0,0.05);
+
+  --t1:  rgba(0,0,0,0.88);
+  --t2:  rgba(0,0,0,0.52);
+  --t3:  rgba(0,0,0,0.28);
+  --sep: rgba(0,0,0,0.07);
+  --r:   16px; --rs: 10px; --p: 999px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --glass:      rgba(30,30,34,0.70);
+    --glass-edge: rgba(255,255,255,0.11);
+    --glass-top:  rgba(255,255,255,0.08);
+    --shadow:     0 8px 32px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.25);
+    --t1: rgba(255,255,255,0.92);
+    --t2: rgba(255,255,255,0.50);
+    --t3: rgba(255,255,255,0.22);
+    --sep: rgba(255,255,255,0.08);
+  }
+}
+
+html, body {
+  height: 100%; overflow: hidden;
+  font-family: -apple-system, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  font-size: 13px; line-height: 1.5;
+  color: var(--t1); user-select: none;
+}
+
+body {
+  background-color: #dde8ff;
+  background-image:
+    radial-gradient(ellipse 75% 65% at 12% 18%,  rgba(160,195,255,0.75) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 55% at 88% 82%,  rgba(190,155,255,0.60) 0%, transparent 55%),
+    radial-gradient(ellipse 65% 45% at 55% 45%,  rgba(255,210,235,0.45) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 60% at 80% 20%,  rgba(145,220,255,0.40) 0%, transparent 50%);
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #0b0d18;
+    background-image:
+      radial-gradient(ellipse 75% 65% at 12% 18%,  rgba(30,55,120,0.80) 0%, transparent 55%),
+      radial-gradient(ellipse 55% 55% at 88% 82%,  rgba(65,30,110,0.70) 0%, transparent 55%),
+      radial-gradient(ellipse 65% 45% at 55% 45%,  rgba(100,25,60,0.45) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 60% at 80% 20%,  rgba(20,80,110,0.50) 0%, transparent 50%);
+  }
+}
+
+.glass {
+  position: relative;
+  background: var(--glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--shadow), inset 0 1.5px 0 var(--glass-top);
+}
+.glass::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(170deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 45%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ── Shell ── */
+.shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  grid-template-rows: 1fr auto;
+  height: 100vh;
+  gap: 10px; padding: 10px;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  grid-row: 1 / 3;
+  border-radius: var(--r);
+  display: flex; flex-direction: column;
+  overflow: hidden; z-index: 1;
+}
+
+.sidebar-top { padding: 16px 14px 12px; flex-shrink: 0; position: relative; z-index: 1; }
+.app-name { font-size: 15px; font-weight: 700; letter-spacing: -.25px; }
+.app-sub  { font-size: 11px; color: var(--t3); margin-top: 2px; }
+
+.sep-line { height: 1px; background: var(--sep); margin: 0 12px; flex-shrink: 0; }
+
+/* ── Projeto selector ── */
+.projeto-wrap {
+  padding: 10px 10px 6px;
+  display: flex; flex-direction: column; gap: 6px;
+  flex-shrink: 0; position: relative; z-index: 1;
+}
+
+.projeto-selector {
+  display: flex; align-items: center; gap: 6px;
+}
+
+.projeto-select {
+  flex: 1;
+  padding: 8px 12px;
+  background: rgba(120,120,128,0.10);
+  border: 1px solid var(--sep);
+  border-radius: var(--p);
+  color: var(--t1);
+  font-size: 12px; font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+.projeto-select:focus { outline: none; border-color: var(--blue); }
+@media (prefers-color-scheme: dark) {
+  .projeto-select { background-color: rgba(120,120,128,0.15); }
+  option { background: #2c2c2e; color: #fff; }
+}
+
+.btn-icon {
+  width: 28px; height: 28px; flex-shrink: 0;
+  background: rgba(0,122,255,0.12);
+  border: 1px solid rgba(0,122,255,0.25);
+  border-radius: var(--p);
+  color: var(--blue);
+  font-size: 14px; line-height: 1;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .12s;
+}
+.btn-icon:hover { background: rgba(0,122,255,0.20); }
+
+/* input novo projeto */
+.novo-projeto-row {
+  display: none; align-items: center; gap: 6px;
+}
+.novo-projeto-row.visible { display: flex; }
+.inp-projeto {
+  flex: 1; padding: 7px 10px;
+  background: rgba(120,120,128,0.10);
+  border: 1.5px solid var(--blue);
+  border-radius: var(--p);
+  color: var(--t1);
+  font-size: 12px; font-family: inherit;
+  outline: none;
+}
+.btn-criar {
+  padding: 6px 12px;
+  background: var(--blue); color: #fff;
+  border: none; border-radius: var(--p);
+  font-size: 12px; font-weight: 600;
+  font-family: inherit; cursor: pointer;
+}
+
+/* ── Gravação ── */
+.rec-wrap {
+  padding: 6px 10px 8px;
+  display: flex; flex-direction: column; gap: 5px;
+  flex-shrink: 0; position: relative; z-index: 1;
+}
+.rec-row {
+  display: flex; align-items: center; gap: 6px;
+}
+.rec-select {
+  flex: 1;
+  padding: 6px 10px;
+  background: rgba(120,120,128,0.10);
+  border: 1px solid var(--sep);
+  border-radius: var(--p);
+  color: var(--t1);
+  font-size: 11px; font-weight: 500;
+  font-family: inherit; cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+}
+.rec-select:disabled { opacity: .5; cursor: default; }
+.btn-rec {
+  flex: 1; padding: 6px 10px;
+  background: rgba(255,59,48,0.10);
+  border: 1px solid rgba(255,59,48,0.22);
+  border-radius: var(--p);
+  color: var(--red);
+  font-size: 11px; font-weight: 600; font-family: inherit;
+  cursor: pointer; transition: background .12s;
+  white-space: nowrap;
+}
+.btn-rec:hover { background: rgba(255,59,48,0.18); }
+.btn-rec.recording { background: var(--red); color: #fff; border-color: var(--red); }
+.btn-rec.recording:hover { filter: brightness(1.08); }
+.rec-timer {
+  font-size: 11px; font-weight: 700; color: var(--red);
+  font-variant-numeric: tabular-nums; letter-spacing: .02em;
+  display: none;
+}
+
+/* ── File lists ── */
+.sec-label {
+  padding: 10px 14px 4px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase;
+  color: var(--t3); flex-shrink: 0; position: relative; z-index: 1;
+}
+
+.file-list {
+  overflow-y: auto; padding: 2px 8px 8px;
+  position: relative; z-index: 1;
+}
+
+.file-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 7px 8px; border-radius: var(--rs);
+  cursor: pointer; transition: background .1s;
+  color: var(--t2); font-size: 12px;
+}
+.file-item:hover { background: rgba(120,120,128,0.10); color: var(--t1); }
+.file-item.active { background: rgba(0,122,255,0.13); color: var(--blue); }
+.file-item.done   { color: var(--t1); }
+
+.file-badge {
+  width: 22px; height: 22px; border-radius: 6px;
+  background: rgba(120,120,128,0.10);
+  border: 1px solid var(--sep);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 10px;
+}
+.file-item.active .file-badge { background: rgba(0,122,255,0.15); border-color: rgba(0,122,255,0.3); }
+.file-item.done   .file-badge { background: rgba(52,199,89,0.12);  border-color: rgba(52,199,89,0.3); color: var(--green); font-size: 11px; }
+.file-item.saved  .file-badge { background: rgba(52,199,89,0.18);  border-color: rgba(52,199,89,0.4); color: var(--green); font-size: 11px; }
+
+.file-name { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+.q-item { display:flex; align-items:center; gap:8px; padding:6px 8px; color:var(--t2); font-size:12px; }
+.q-item.active { color: var(--blue); }
+.q-dot { width:5px; height:5px; border-radius:50%; background:var(--t3); flex-shrink:0; }
+.q-item.active .q-dot { background: var(--blue); }
+.q-name { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+.ph { color:var(--t3); font-size:12px; text-align:center; display:block; padding:8px 4px; user-select:none; }
+
+.sidebar-scroll {
+  flex: 1; overflow-y: auto;
+  display: flex; flex-direction: column;
+}
+
+/* ── Content ── */
+.content {
+  border-radius: var(--r);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  z-index: 1;
+}
+
+.dropzone {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px; padding: 40px;
+  position: relative; z-index: 1;
+}
+.dz-icon {
+  width: 68px; height: 68px; border-radius: 20px;
+  background: rgba(0,122,255,0.10); border: 1px solid rgba(0,122,255,0.22);
+  box-shadow: inset 0 1.5px 0 rgba(255,255,255,0.5), 0 6px 20px rgba(0,122,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; margin-bottom: 6px;
+}
+.dz-title { font-size: 16px; font-weight: 700; color: var(--t2); letter-spacing: -.25px; }
+.dz-sub   { font-size: 12px; color: var(--t3); text-align: center; line-height: 1.65; }
+
+.transcript-area { flex:1; display:flex; flex-direction:column; overflow:hidden; position:relative; z-index:1; }
+
+/* ── Header da transcrição ── */
+.transcript-header {
+  padding: 10px 14px; border-bottom: 1px solid var(--sep);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0; gap: 8px;
+}
+.transcript-filename { font-size:13px; font-weight:600; color:var(--t1); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; flex:1; }
+.transcript-actions  { display:flex; gap:5px; flex-shrink:0; align-items:center; }
+
+.btn-pill {
+  padding: 5px 12px; border-radius: var(--p);
+  background: rgba(120,120,128,0.12); border: 1px solid var(--sep);
+  color: var(--t2); font-size: 11.5px; font-family: inherit; cursor: pointer;
+  transition: background .1s, color .1s;
+  white-space: nowrap;
+}
+.btn-pill:hover { background: rgba(120,120,128,0.20); color: var(--t1); }
+.btn-pill.active {
+  background: rgba(0,122,255,0.15); color: var(--blue);
+  border-color: rgba(0,122,255,0.30);
+}
+
+/* ── Barra de busca ── */
+.search-bar {
+  display: none;
+  align-items: center; gap: 7px;
+  padding: 7px 14px; border-bottom: 1px solid var(--sep);
+  background: rgba(120,120,128,0.05);
+  flex-shrink: 0;
+}
+.search-bar.visible { display: flex; }
+.search-icon { font-size: 13px; color: var(--t3); }
+.search-input {
+  flex: 1; border: none; background: transparent;
+  color: var(--t1); font-size: 13px; font-family: inherit;
+  outline: none;
+}
+.search-input::placeholder { color: var(--t3); }
+.search-nav, .search-close {
+  width: 22px; height: 22px; border-radius: 6px;
+  background: rgba(120,120,128,0.10); border: 1px solid var(--sep);
+  color: var(--t2); font-size: 12px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .1s;
+}
+.search-nav:hover, .search-close:hover { background: rgba(120,120,128,0.20); color: var(--t1); }
+.search-hint { font-size: 11px; color: var(--t3); white-space: nowrap; }
+
+/* ── Barra de locutores ── */
+.loc-bar {
+  display: none; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 8px 14px; border-bottom: 1px solid var(--sep);
+  background: rgba(120,120,128,0.05); flex-shrink: 0;
+}
+.loc-bar.visible { display: flex; }
+.loc-label { font-size: 12px; color: var(--t2); white-space: nowrap; }
+.loc-qtd {
+  width: 54px; border-radius: 7px; padding: 4px 7px;
+  border: 1px solid var(--sep); background: rgba(120,120,128,0.10);
+  color: var(--t1); font-size: 12px; font-family: inherit; outline: none;
+}
+.loc-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 9px; border-radius: var(--p);
+  background: rgba(0,122,255,0.10); border: 1px solid rgba(0,122,255,0.22);
+}
+.loc-chip input {
+  border: none; background: transparent; outline: none;
+  color: var(--blue); font-size: 12px; font-family: inherit;
+  font-weight: 550; width: 74px;
+}
+.loc-chip span { font-size: 10.5px; color: var(--t3); white-space: nowrap; }
+
+/* ── Painel de cortes ── */
+.cortes-bar {
+  display: none; flex-direction: column; gap: 8px;
+  padding: 10px 14px; border-bottom: 1px solid var(--sep);
+  background: rgba(120,120,128,0.05); flex-shrink: 0;
+  max-height: 46%;
+}
+.cortes-bar.visible { display: flex; }
+.cortes-acoes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.cortes-lista { overflow-y: auto; display: flex; flex-direction: column; gap: 5px; }
+.corte-item {
+  display: flex; align-items: flex-start; gap: 9px;
+  padding: 7px 10px; border-radius: var(--rs);
+  background: rgba(120,120,128,0.08); border: 1px solid transparent;
+  cursor: pointer; transition: background .1s, border-color .1s;
+}
+.corte-item:hover { background: rgba(120,120,128,0.15); }
+.corte-item.marcado {
+  background: rgba(52,199,89,0.12); border-color: rgba(52,199,89,0.32);
+}
+.corte-marca {
+  font-size: 13px; line-height: 1.3; width: 16px; flex-shrink: 0;
+  color: var(--t3);
+}
+.corte-item.marcado .corte-marca { color: var(--green); }
+.corte-corpo { flex: 1; min-width: 0; }
+.corte-tempo {
+  font-size: 11.5px; font-variant-numeric: tabular-nums;
+  color: var(--t2); font-weight: 550;
+}
+.corte-dur  { color: var(--t3); font-weight: 400; }
+.corte-quem {
+  color: var(--blue); font-weight: 550; margin-left: 6px;
+}
+.corte-texto {
+  font-size: 12px; color: var(--t2); line-height: 1.5; margin-top: 2px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Corpo da transcrição ── */
+.transcript-body {
+  flex:1; overflow-y:auto; padding:18px 20px;
+  font-size:13.5px; line-height:1.78; color:var(--t1);
+  white-space:pre-wrap; word-break:break-word;
+  user-select:text; position:relative; z-index:1;
+  cursor: text; outline: none;
+}
+.transcript-body:empty::before {
+  content: attr(data-ph);
+  color: var(--t3);
+  pointer-events: none;
+}
+.transcript-body[contenteditable="false"] { cursor: default; }
+
+/* ── Banner de salvar ── */
+.save-banner {
+  display: none;
+  align-items: center; justify-content: space-between;
+  gap: 12px; padding: 10px 16px;
+  border-top: 1px solid var(--sep);
+  flex-shrink: 0;
+  position: relative; z-index: 1;
+}
+.save-banner.visible { display: flex; }
+.save-banner-text { font-size: 12px; color: var(--t2); }
+.save-banner-text strong { color: var(--t1); }
+.save-banner-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+.btn-salvar {
+  padding: 6px 16px; border-radius: var(--p);
+  background: var(--blue); color: #fff;
+  border: none; font-size: 12px; font-weight: 600;
+  font-family: inherit; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,122,255,0.28);
+  transition: filter .1s;
+}
+.btn-salvar:hover { filter: brightness(1.08); }
+
+.btn-nao {
+  padding: 6px 14px; border-radius: var(--p);
+  background: rgba(120,120,128,0.12); border: 1px solid var(--sep);
+  color: var(--t2); font-size: 12px; font-family: inherit; cursor: pointer;
+}
+.btn-nao:hover { background: rgba(120,120,128,0.20); color: var(--t1); }
+
+/* ── Bottom bar ── */
+.bottom-bar {
+  border-radius: var(--r); padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 9px; z-index: 1;
+}
+
+.progress-row { display:flex; align-items:center; gap:10px; }
+.progress-track { flex:1; height:3px; background:var(--sep); border-radius:99px; overflow:hidden; }
+.progress-fill  { height:100%; background:var(--blue); border-radius:99px; transition:width .3s ease; width:0%; }
+.status-text { font-size:11px; color:var(--t3); white-space:nowrap; max-width:220px; overflow:hidden; text-overflow:ellipsis; }
+
+.btn-transcribe {
+  width: 100%; padding: 11px;
+  background: var(--blue); color: #fff; border: none;
+  border-radius: var(--p); font-size: 15px; font-weight: 700;
+  font-family: inherit; cursor: pointer; letter-spacing: -.15px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 4px 18px rgba(0,122,255,0.32);
+  transition: filter .12s, transform .1s, opacity .15s;
+}
+.btn-transcribe:hover:not(:disabled) { filter: brightness(1.07); }
+.btn-transcribe:active:not(:disabled) { transform: scale(.99); }
+.btn-transcribe:disabled { opacity: .38; cursor: default; box-shadow: none; }
+
+/* ── Drag overlay ── */
+.drag-overlay {
+  display: none; position: fixed; inset: 0; z-index: 999;
+  background: rgba(0,122,255,0.06); border: 2px dashed rgba(0,122,255,0.45);
+  border-radius: 20px; margin: 8px;
+  align-items: center; justify-content: center; flex-direction: column; gap: 8px;
+  pointer-events: none; backdrop-filter: blur(6px) saturate(140%);
+}
+.drag-overlay.visible { display: flex; }
+.drag-overlay-title { font-size: 18px; font-weight: 700; color: var(--blue); letter-spacing: -.25px; }
+.drag-overlay-sub   { font-size: 12px; color: rgba(0,122,255,.60); }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--sep); border-radius: 99px; }
+</style>
+</head>
+<body>
+
+<div class="drag-overlay" id="drag-overlay">
+  <div class="drag-overlay-title">Soltar para adicionar</div>
+  <div class="drag-overlay-sub">mp4 · mkv · mov · mp3 · wav · opus e mais</div>
+</div>
+
+<div class="shell">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar glass">
+
+    <div class="sidebar-top">
+      <div class="app-name">Transcrição</div>
+      <div class="app-sub">Whisper · 100% local</div>
+    </div>
+
+    <div class="sep-line"></div>
+
+    <!-- Projeto -->
+    <div class="projeto-wrap">
+      <div class="projeto-selector">
+        <select class="projeto-select" id="projeto-select" onchange="onProjetoChange(this.value)">
+          <option value="">Sem projeto</option>
+        </select>
+        <button class="btn-icon" onclick="abrirFinder()" title="Abrir no Finder" id="btn-finder" style="display:none;">📂</button>
+        <button class="btn-icon" onclick="toggleNovoProjeto()" title="Novo projeto" style="font-size:18px;">+</button>
+      </div>
+      <div class="novo-projeto-row" id="novo-projeto-row">
+        <input class="inp-projeto" id="inp-projeto" placeholder="Nome do projeto…"
+               onkeydown="if(event.key==='Enter')criarProjeto(); if(event.key==='Escape')toggleNovoProjeto()"/>
+        <button class="btn-criar" onclick="criarProjeto()">Criar</button>
+      </div>
+    </div>
+
+    <div class="sep-line"></div>
+
+    <!-- Gravação -->
+    <div class="rec-wrap">
+      <div class="sec-label" style="padding:4px 4px 4px; font-size:10px;">Gravar áudio</div>
+      <select class="rec-select" id="rec-device">
+        <option value="">Carregando microfones…</option>
+      </select>
+      <div class="rec-row">
+        <button class="btn-rec" id="btn-rec" onclick="toggleGravacao()">🎙 Gravar</button>
+        <span class="rec-timer" id="rec-timer">00:00</span>
+      </div>
+    </div>
+
+    <div class="sep-line"></div>
+
+    <div class="sidebar-scroll">
+
+      <!-- Fila -->
+      <div id="queue-section">
+        <div class="sec-label">Na fila</div>
+        <div class="file-list" id="queue-list">
+          <span class="ph">Nenhum arquivo</span>
+        </div>
+      </div>
+
+      <!-- Transcritos nesta sessão -->
+      <div id="results-section" style="display:none">
+        <div class="sep-line" style="margin:4px 12px"></div>
+        <div class="sec-label">Transcritos agora</div>
+        <div class="file-list" id="results-list"></div>
+      </div>
+
+      <!-- Salvos no projeto -->
+      <div id="saved-section" style="display:none">
+        <div class="sep-line" style="margin:4px 12px"></div>
+        <div class="sec-label" id="saved-label">Salvos</div>
+        <div class="file-list" id="saved-list"></div>
+      </div>
+
+    </div>
+
+    <div class="sep-line"></div>
+
+    <!-- Ações de fila -->
+    <div style="padding:8px 10px; display:flex; flex-direction:column; gap:5px; flex-shrink:0; position:relative; z-index:1;">
+      <button class="btn-criar" style="background:var(--blue); border-radius:var(--p); padding:9px 16px; font-size:13px;" onclick="adicionarArquivos()">+ Adicionar arquivos</button>
+      <button class="btn-nao" onclick="limparFila()">Limpar fila</button>
+    </div>
+
+  </aside>
+
+  <!-- ── Conteúdo ── -->
+  <main class="content glass">
+
+    <div class="dropzone" id="dropzone">
+      <div class="dz-icon">🎙</div>
+      <div class="dz-title">Arraste arquivos aqui</div>
+      <div class="dz-sub">ou use o botão ao lado para selecionar<br>mp4, mkv, mov, avi, mp3, wav, opus…</div>
+    </div>
+
+    <div class="transcript-area" id="transcript-area" style="display:none">
+      <!-- Header -->
+      <div class="transcript-header">
+        <span class="transcript-filename" id="transcript-filename">—</span>
+        <div class="transcript-actions">
+          <!-- Exportar tudo (aparece a partir do 2º) -->
+          <button class="btn-pill" id="btn-exportar"
+                  onclick="exportarTodos()" style="display:none"
+                  title="Exportar todas as transcrições como .txt (⌘⇧E)">
+            Exportar tudo
+          </button>
+          <!-- SRT (aparece quando há segmentos para o arquivo atual) -->
+          <button class="btn-pill" id="btn-srt"
+                  onclick="exportarSRT()" style="display:none"
+                  title="Exportar legenda .srt para este arquivo">
+            Salvar .srt
+          </button>
+          <!-- Locutores (aparece quando há segmentos para o arquivo atual) -->
+          <button class="btn-pill" id="btn-locutores"
+                  onclick="toggleLocutores()" style="display:none"
+                  title="Identificar quem falou o quê">🗣 Locutores</button>
+          <!-- Cortes: o entregável do social media -->
+          <button class="btn-pill" id="btn-cortes"
+                  onclick="toggleCortes()" style="display:none"
+                  title="Marcar trechos e exportar os vídeos cortados">✂ Cortes</button>
+          <button class="btn-pill" onclick="salvar()" title="Salvar transcrição como .txt">Salvar .txt</button>
+          <button class="btn-pill" onclick="copiar()" title="Copiar texto (⌘C)">Copiar</button>
+          <!-- Toggle timestamps -->
+          <button class="btn-pill active" id="btn-timestamps"
+                  onclick="toggleTimestamps()"
+                  title="Alternar exibição de timestamps (⌘T)">⏱</button>
+          <!-- Busca -->
+          <button class="btn-pill" id="btn-search"
+                  onclick="toggleBusca()"
+                  title="Buscar no texto (⌘F)">🔍</button>
+        </div>
+      </div>
+
+      <!-- Barra de busca (Cmd+F) -->
+      <div class="search-bar" id="search-bar">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" id="search-input"
+               placeholder="Buscar no texto…"
+               oninput="onBuscar()"
+               onkeydown="onBuscarKey(event)"/>
+        <span class="search-hint" id="search-hint"></span>
+        <button class="search-nav" onclick="buscarAnterior()" title="Anterior (⇧Enter)">↑</button>
+        <button class="search-nav" onclick="buscarProximo()" title="Próximo (Enter)">↓</button>
+        <button class="search-close" onclick="fecharBusca()" title="Fechar (Esc)">×</button>
+      </div>
+
+      <!-- Barra de locutores -->
+      <div class="loc-bar" id="loc-bar">
+        <span class="loc-label">Quantas pessoas falam?</span>
+        <input class="loc-qtd" id="loc-qtd" type="number" min="0" max="20"
+               value="0" title="0 = descobrir sozinho"/>
+        <span class="loc-label" style="color:var(--t3)">0 = automático</span>
+        <button class="btn-pill" id="btn-loc-run" onclick="identificarLocutores()">Identificar</button>
+        <span class="search-hint" id="loc-hint"></span>
+        <div id="loc-chips" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
+      </div>
+
+      <!-- Painel de cortes -->
+      <div class="cortes-bar" id="cortes-bar">
+        <div class="cortes-acoes">
+          <button class="btn-pill" onclick="sugerirCortes()">Sugerir trechos</button>
+          <button class="btn-pill" onclick="copiarListaCortes()">Copiar lista</button>
+          <button class="btn-pill" id="btn-exp-cortes"
+                  onclick="exportarVideosCortes()">Exportar vídeos</button>
+          <span class="search-hint" id="cortes-hint">
+            clique num trecho para marcar
+          </span>
+        </div>
+        <div class="cortes-lista" id="cortes-lista"></div>
+      </div>
+
+      <!-- Corpo editável -->
+      <div class="transcript-body" id="transcript-body"
+           contenteditable="plaintext-only" spellcheck="false"
+           data-ph="A transcrição aparecerá aqui…"
+           oninput="onTranscriptEdit()"></div>
+
+      <!-- Banner de salvar no projeto -->
+      <div class="save-banner" id="save-banner">
+        <span class="save-banner-text" id="save-banner-text"></span>
+        <div class="save-banner-actions">
+          <button class="btn-nao" onclick="descartarSalvar()">Não</button>
+          <button class="btn-salvar" onclick="salvarNoProjeto()">Salvar</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── Bottom bar ── -->
+  <div class="bottom-bar glass">
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+      <span class="status-text" id="status"></span>
+    </div>
+    <button class="btn-transcribe" id="btn-transcribe" onclick="transcrever()">Transcrever</button>
+  </div>
+
+</div>
+
+<script>
+const state = {
+  fila: [],
+  resultados: {},       // { path: texto com timestamps }
+  selecionado: null,    // path ou "saved:path"
+  transcrevendo: false,
+  projeto: "",
+  pendingSave: [],
+  mostrarTimestamps: true,
+  gravando: false,
+  diarizando: false,
+  cortesSugeridos: [],
+  cortesSalvos: [],
+};
+
+// ── Init ──────────────────────────────────────────────────────────────
+
+window.addEventListener("pywebviewready", async () => {
+  const sis = await pywebview.api.estado_sistema();
+  if (!sis.ffmpeg) {
+    setStatus("⚠ ffmpeg não encontrado — gravação e vídeo não vão funcionar. Veja o README.");
+  }
+  pywebview.api.precarregar_modelo();
+  const projetos = await pywebview.api.listar_projetos();
+  renderProjetoSelect(projetos, "");
+  initDispositivos();
+});
+
+// ── Projetos ──────────────────────────────────────────────────────────
+
+function renderProjetoSelect(projetos, ativo) {
+  const sel = document.getElementById("projeto-select");
+  sel.innerHTML = '<option value="">Sem projeto</option>' +
+    projetos.map(p => `<option value="${esc(p)}" ${p===ativo?"selected":""}>${esc(p)}</option>`).join("");
+  state.projeto = ativo;
+  atualizarSavedSection();
+}
+
+async function onProjetoChange(nome) {
+  state.projeto = nome;
+  document.getElementById("btn-finder").style.display = nome ? "flex" : "none";
+  if (!nome) { hideSavedSection(); return; }
+  const res = await pywebview.api.set_projeto_ativo(nome);
+  renderSavedList(nome, res.transcricoes);
+}
+
+function toggleNovoProjeto() {
+  const row = document.getElementById("novo-projeto-row");
+  const visible = row.classList.toggle("visible");
+  if (visible) setTimeout(() => document.getElementById("inp-projeto").focus(), 50);
+  else document.getElementById("inp-projeto").value = "";
+}
+
+async function criarProjeto() {
+  const nome = document.getElementById("inp-projeto").value.trim();
+  if (!nome) return;
+  const res = await pywebview.api.criar_projeto(nome);
+  if (!res.ok) { setStatus(res.msg); return; }
+  renderProjetoSelect(res.projetos, res.ativo);
+  toggleNovoProjeto();
+  hideSavedSection();
+}
+
+function renderSavedList(projeto, transcricoes) {
+  const sec   = document.getElementById("saved-section");
+  const label = document.getElementById("saved-label");
+  const list  = document.getElementById("saved-list");
+  label.textContent = "Salvos — " + projeto;
+  if (!transcricoes.length) {
+    list.innerHTML = '<span class="ph">Nenhuma transcrição salva</span>';
+  } else {
+    list.innerHTML = transcricoes.map(t =>
+      `<div class="file-item saved ${state.selecionado==="saved:"+t.path?"active":""}"
+            data-saved="${esc(t.path)}" title="${esc(t.nome)}">
+         <div class="file-badge">✓</div>
+         <span class="file-name">${esc(t.nome)}</span>
+       </div>`
+    ).join("");
+  }
+  sec.style.display = "block";
+}
+
+function hideSavedSection() {
+  document.getElementById("saved-section").style.display = "none";
+}
+
+async function atualizarSavedSection() {
+  if (!state.projeto) { hideSavedSection(); return; }
+  const res = await pywebview.api.set_projeto_ativo(state.projeto);
+  renderSavedList(state.projeto, res.transcricoes);
+}
+
+// ── Gravação de áudio ─────────────────────────────────────────────────
+
+let _recTimer = null;
+let _recStart = null;
+
+async function initDispositivos() {
+  const devs = await pywebview.api.listar_dispositivos();
+  const sel  = document.getElementById("rec-device");
+  if (!devs || !devs.length) {
+    sel.innerHTML = '<option value="">Sem microfone disponível</option>';
+    return;
+  }
+  sel.innerHTML = devs.map(d =>
+    `<option value="${d.idx}">${esc(d.nome)}</option>`
+  ).join("");
+}
+
+async function toggleGravacao() {
+  if (!state.gravando) await iniciarGravacao();
+  else await pararGravacao();
+}
+
+async function iniciarGravacao() {
+  const sel = document.getElementById("rec-device");
+  const idx = sel.value;
+  if (idx === "" || idx === undefined) { setStatus("Selecione um microfone primeiro."); return; }
+
+  const res = await pywebview.api.iniciar_gravacao(parseInt(idx));
+  if (!res.ok) { setStatus("Erro ao gravar: " + (res.msg || "microfone indisponível")); return; }
+
+  state.gravando = true;
+  _recStart = Date.now();
+
+  const btn = document.getElementById("btn-rec");
+  btn.textContent = "⏹ Parar";
+  btn.classList.add("recording");
+
+  const timer = document.getElementById("rec-timer");
+  timer.style.display = "inline";
+  timer.textContent = "00:00";
+
+  document.getElementById("rec-device").disabled = true;
+
+  _recTimer = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - _recStart) / 1000);
+    const m = String(Math.floor(elapsed / 60)).padStart(2, "0");
+    const s = String(elapsed % 60).padStart(2, "0");
+    document.getElementById("rec-timer").textContent = `${m}:${s}`;
+  }, 1000);
+}
+
+async function pararGravacao() {
+  clearInterval(_recTimer); _recTimer = null;
+  state.gravando = false;
+
+  const btn = document.getElementById("btn-rec");
+  btn.textContent = "🎙 Gravar";
+  btn.classList.remove("recording");
+  document.getElementById("rec-timer").style.display = "none";
+  document.getElementById("rec-timer").textContent = "00:00";
+  document.getElementById("rec-device").disabled = false;
+
+  const res = await pywebview.api.parar_gravacao();
+  if (!res.ok) { setStatus("Erro ao salvar gravação: " + (res.msg || "")); return; }
+
+  state.fila = res.fila;
+  renderFila();
+  updateDropzone();
+  setStatus(`Gravação "${res.nome}" adicionada à fila.${res.aviso || ""}`);
+  setTimeout(() => setStatus(""), 4000);
+}
+
+// ── Fila ──────────────────────────────────────────────────────────────
+
+async function adicionarArquivos() {
+  const fila = await pywebview.api.selecionar_arquivos();
+  state.fila = fila; renderFila(); updateDropzone();
+}
+
+async function limparFila() {
+  if (state.transcrevendo) return;
+  const res = await pywebview.api.limpar_fila();
+  if (res.ok) { state.fila = []; renderFila(); setStatus(""); updateDropzone(); }
+  else setStatus(res.msg || "");
+}
+
+async function transcrever() {
+  if (state.transcrevendo || !state.fila.length) return;
+  const res = await pywebview.api.iniciar_transcricao();
+  if (res.ok) setTranscribing(true);
+}
+
+// ── Timestamps toggle ─────────────────────────────────────────────────
+
+function stripTimestamps(texto) {
+  return texto.split("\n")
+    .map(l => l.replace(/^\[\d{2}:\d{2}:\d{2}\]\s*/, "").trim())
+    .filter(l => l)
+    .join(" ");
+}
+
+function toggleTimestamps() {
+  state.mostrarTimestamps = !state.mostrarTimestamps;
+
+  const btn  = document.getElementById("btn-timestamps");
+  const body = document.getElementById("transcript-body");
+
+  btn.classList.toggle("active", state.mostrarTimestamps);
+  btn.title = state.mostrarTimestamps
+    ? "Ocultar timestamps (⌘T)"
+    : "Mostrar timestamps (⌘T)";
+
+  // quando timestamps estão ocultos, bloqueia edição (para não perder os dados)
+  body.contentEditable = state.mostrarTimestamps ? "plaintext-only" : "false";
+
+  // re-renderiza transcrição atual
+  if (state.selecionado && !state.selecionado.startsWith("saved:")) {
+    const texto = state.resultados[state.selecionado];
+    if (texto !== undefined) {
+      body.textContent = state.mostrarTimestamps ? texto : stripTimestamps(texto);
+    }
+  }
+}
+
+// ── Export SRT ────────────────────────────────────────────────────────
+
+async function exportarSRT() {
+  if (!state.selecionado || state.selecionado.startsWith("saved:")) return;
+  setStatus("Abrindo janela de exportação…");
+  const res = await pywebview.api.exportar_srt(state.selecionado);
+  if (!res.ok) {
+    setStatus(res.msg || "Exportação cancelada.");
+    setTimeout(() => setStatus(""), 3000);
+    return;
+  }
+  setStatus("Legenda .srt salva com sucesso!");
+  setTimeout(() => setStatus(""), 3000);
+}
+
+// ── Cortes ────────────────────────────────────────────────────────────
+
+function toggleCortes() {
+  const bar = document.getElementById("cortes-bar");
+  const vis = bar.classList.toggle("visible");
+  document.getElementById("btn-cortes").classList.toggle("active", vis);
+  if (vis) carregarCortes();
+}
+
+async function carregarCortes() {
+  if (!state.selecionado || state.selecionado.startsWith("saved:")) return;
+  const r = await pywebview.api.listar_cortes(state.selecionado);
+  state.cortesSalvos = r.cortes || [];
+  renderCortes();
+}
+
+async function sugerirCortes() {
+  if (!state.selecionado || state.selecionado.startsWith("saved:")) return;
+  const hint = document.getElementById("cortes-hint");
+  hint.textContent = "analisando…";
+  const r = await pywebview.api.cortes_sugeridos(state.selecionado);
+  if (!r.ok) { hint.textContent = r.msg || "não deu"; return; }
+  state.cortesSugeridos = r.cortes || [];
+  hint.textContent = state.cortesSugeridos.length
+    ? `${state.cortesSugeridos.length} trecho(s) — clique para marcar`
+    : "nenhum trecho de 25s a 90s encontrado";
+  renderCortes();
+}
+
+// Um sugerido e um salvo são o mesmo corte se começam no mesmo instante.
+function _salvoDe(c) {
+  return state.cortesSalvos.find(s => Math.abs(s.inicio_seg - c.inicio) < 0.05);
+}
+
+function renderCortes() {
+  const alvo = document.getElementById("cortes-lista");
+  const salvosSoltos = state.cortesSalvos.filter(
+    s => !state.cortesSugeridos.some(c => Math.abs(s.inicio_seg - c.inicio) < 0.05));
+
+  const linhas = [
+    ...state.cortesSugeridos.map((c, i) => {
+      const s = _salvoDe(c);
+      return { marcado: !!s, idx: i, id: s ? s.id : null,
+               ini: c.inicio_hms, fim: c.fim_hms, dur: c.duracao,
+               quem: c.rotulo_locutor, texto: c.texto };
+    }),
+    ...salvosSoltos.map(s => ({
+      marcado: true, idx: null, id: s.id,
+      ini: s.inicio_hms, fim: s.fim_hms, dur: s.duracao,
+      quem: s.locutor, texto: s.texto })),
+  ];
+
+  if (!linhas.length) {
+    alvo.innerHTML = '<span class="ph" style="font-size:12px;color:var(--t3)">'
+                   + 'Clique em "Sugerir trechos" para começar.</span>';
+    return;
+  }
+
+  alvo.innerHTML = linhas.map((l, n) => `
+    <div class="corte-item ${l.marcado ? "marcado" : ""}" onclick="alternarCorte(${n})">
+      <span class="corte-marca">${l.marcado ? "●" : "○"}</span>
+      <div class="corte-corpo">
+        <div class="corte-tempo">${l.ini} → ${l.fim}
+          <span class="corte-dur">${l.dur}s</span>
+          ${l.quem ? `<span class="corte-quem">${esc(l.quem)}</span>` : ""}
+        </div>
+        ${l.texto ? `<div class="corte-texto">${esc(l.texto)}</div>` : ""}
+      </div>
+    </div>`).join("");
+  window._cortesLinhas = linhas;
+}
+
+async function alternarCorte(n) {
+  const l = (window._cortesLinhas || [])[n];
+  if (!l) return;
+  if (l.marcado && l.id) {
+    const r = await pywebview.api.remover_corte(state.selecionado, l.id);
+    state.cortesSalvos = r.cortes || [];
+  } else {
+    const c = state.cortesSugeridos[l.idx];
+    if (!c) return;
+    const r = await pywebview.api.salvar_corte(
+      state.selecionado, c.inicio, c.fim, c.texto, c.rotulo_locutor, "");
+    if (!r.ok) { document.getElementById("cortes-hint").textContent = r.msg; return; }
+    state.cortesSalvos = r.cortes || [];
+  }
+  renderCortes();
+}
+
+async function copiarListaCortes() {
+  const r = await pywebview.api.copiar_lista_cortes(state.selecionado);
+  document.getElementById("cortes-hint").textContent =
+    r.ok ? "lista copiada" : (r.msg || "nada para copiar");
+}
+
+async function exportarVideosCortes() {
+  const btn = document.getElementById("btn-exp-cortes");
+  const hint = document.getElementById("cortes-hint");
+  btn.disabled = true; hint.textContent = "cortando…";
+  const r = await pywebview.api.exportar_videos_cortes(state.selecionado);
+  btn.disabled = false;
+  hint.textContent = r.ok
+    ? `${r.feitos} vídeo(s) na pasta "cortes"` + (r.erros ? ` · ${r.erros} com erro` : "")
+    : (r.msg || "não deu");
+}
+
+// ── Locutores (diarização) ────────────────────────────────────────────
+
+function toggleLocutores() {
+  const bar = document.getElementById("loc-bar");
+  const vis = bar.classList.toggle("visible");
+  document.getElementById("btn-locutores").classList.toggle("active", vis);
+  if (vis) renderChipsLocutores();
+}
+
+async function identificarLocutores() {
+  if (!state.selecionado || state.selecionado.startsWith("saved:")) return;
+  if (state.diarizando) return;
+  const qtd = parseInt(document.getElementById("loc-qtd").value || "0", 10);
+  const res = await pywebview.api.iniciar_diarizacao(state.selecionado, qtd);
+  if (!res.ok) {
+    document.getElementById("loc-hint").textContent = res.msg || "Não foi possível iniciar.";
+    return;
+  }
+  state.diarizando = true;
+  const btn = document.getElementById("btn-loc-run");
+  btn.disabled = true; btn.textContent = "Identificando…";
+  document.getElementById("loc-hint").textContent = "";
+}
+
+// Chamado pelo Python ao terminar
+function onDiarizacao(path, texto, qtd) {
+  state.diarizando = false;
+  const btn = document.getElementById("btn-loc-run");
+  btn.disabled = false; btn.textContent = "Identificar";
+  if (!texto) return;                       // erro já reportado via setStatus
+  state.resultados[path] = texto;
+  if (state.selecionado === path) mostrarTranscricao(path);
+  document.getElementById("loc-hint").textContent =
+    `${qtd} locutor(es) — renomeie clicando nos nomes`;
+  renderChipsLocutores();
+}
+
+async function renderChipsLocutores() {
+  const alvo = document.getElementById("loc-chips");
+  if (!state.selecionado || state.selecionado.startsWith("saved:")) { alvo.innerHTML = ""; return; }
+  const locs = await pywebview.api.listar_locutores(state.selecionado);
+  alvo.innerHTML = locs.map(l => {
+    const m = Math.floor(l.segundos / 60), s = l.segundos % 60;
+    return `<span class="loc-chip">
+      <input value="${esc(l.nome)}" data-idx="${l.indice}"
+             onchange="renomearLocutor(this)" onkeydown="if(event.key==='Enter')this.blur()"/>
+      <span>${m}m${String(s).padStart(2,"0")}s</span></span>`;
+  }).join("");
+}
+
+async function renomearLocutor(input) {
+  const idx = parseInt(input.dataset.idx, 10);
+  const res = await pywebview.api.renomear_locutor(state.selecionado, idx, input.value);
+  if (res.ok) {
+    state.resultados[state.selecionado] = res.texto;
+    mostrarTranscricao(state.selecionado);
+  }
+}
+
+// ── Busca (Cmd+F) ─────────────────────────────────────────────────────
+
+let _lastSearch = "";
+
+function toggleBusca() {
+  const bar = document.getElementById("search-bar");
+  const visible = bar.classList.toggle("visible");
+  if (visible) {
+    document.getElementById("search-input").focus();
+    document.getElementById("search-input").select();
+    document.getElementById("btn-search").classList.add("active");
+  } else {
+    fecharBusca();
+  }
+}
+
+function fecharBusca() {
+  document.getElementById("search-bar").classList.remove("visible");
+  document.getElementById("search-input").value = "";
+  document.getElementById("search-hint").textContent = "";
+  document.getElementById("btn-search").classList.remove("active");
+  _lastSearch = "";
+  window.getSelection().removeAllRanges();
+}
+
+function onBuscar() {
+  const term = document.getElementById("search-input").value;
+  if (!term) {
+    window.getSelection().removeAllRanges();
+    _lastSearch = "";
+    document.getElementById("search-hint").textContent = "";
+    return;
+  }
+  _lastSearch = term;
+  document.getElementById("transcript-body").focus();
+  const found = window.find(term, false, false, true, false, false, false);
+  document.getElementById("search-hint").textContent = found ? "" : "Não encontrado";
+}
+
+function buscarProximo() {
+  if (!_lastSearch) return;
+  document.getElementById("transcript-body").focus();
+  const found = window.find(_lastSearch, false, false, true, false, false, false);
+  document.getElementById("search-hint").textContent = found ? "" : "Não encontrado";
+}
+
+function buscarAnterior() {
+  if (!_lastSearch) return;
+  document.getElementById("transcript-body").focus();
+  const found = window.find(_lastSearch, false, true, true, false, false, false);
+  document.getElementById("search-hint").textContent = found ? "" : "Não encontrado";
+}
+
+function onBuscarKey(e) {
+  if (e.key === "Escape") { fecharBusca(); return; }
+  if (e.key === "Enter") {
+    e.preventDefault();
+    e.shiftKey ? buscarAnterior() : buscarProximo();
+  }
+}
+
+// ── Ações ─────────────────────────────────────────────────────────────
+
+async function copiar() {
+  const t = textoAtivo(); if (!t) return;
+  await pywebview.api.copiar(t);
+  setStatus("Copiado!"); setTimeout(() => setStatus(""), 2000);
+}
+
+async function salvar() {
+  const t = textoAtivo(); if (!t) return;
+  const key  = state.selecionado || "";
+  const base = key.startsWith("saved:")
+    ? (document.getElementById("transcript-filename").textContent.split("  ·  ")[0]
+       || "transcricao")
+    : (key.split("/").pop().replace(/\.[^.]+$/,"") || "transcricao");
+  await pywebview.api.salvar(t, base + ".txt");
+}
+
+async function exportarTodos() {
+  await flushEdicao();
+  const res = await pywebview.api.exportar_todos();
+  if (!res.ok) { if (res.msg) setStatus(res.msg); return; }
+  const n    = res.salvos.length;
+  const nome = res.pasta.split("/").pop();
+  setStatus(res.erros.length
+    ? `${n} exportado(s) em "${nome}". ${res.erros.length} com erro.`
+    : `${n} arquivo(s) exportado(s) em "${nome}".`);
+  setTimeout(() => setStatus(""), 4000);
+}
+
+// ── Edição inline ─────────────────────────────────────────────────────
+
+let _editTimer   = null;
+let _editPendente = null;   // path com edição ainda não enviada ao Python
+
+function onTranscriptEdit() {
+  if (!state.selecionado || state.selecionado.startsWith("saved:")) return;
+  if (!state.mostrarTimestamps) return; // timestamps ocultos = só-leitura, não sincroniza
+  const path = state.selecionado;
+  state.resultados[path] =
+    document.getElementById("transcript-body").innerText.trimEnd();
+
+  // O Python tem a própria cópia do texto, e é dela que saem o salvar-no-projeto
+  // e o exportar-tudo. Sem empurrar a edição pra lá, a correção era descartada.
+  _editPendente = path;
+  clearTimeout(_editTimer);
+  _editTimer = setTimeout(flushEdicao, 400);
+}
+
+async function flushEdicao() {
+  clearTimeout(_editTimer);
+  _editTimer = null;
+  const path = _editPendente;
+  if (!path) return;
+  _editPendente = null;
+  await pywebview.api.atualizar_texto(path, state.resultados[path] ?? "");
+}
+
+// ── Finder ────────────────────────────────────────────────────────────
+
+async function abrirFinder() {
+  if (state.projeto) await pywebview.api.abrir_pasta_projeto(state.projeto);
+}
+
+// ── Salvar no projeto ─────────────────────────────────────────────────
+
+async function salvarNoProjeto() {
+  if (!state.projeto) { setStatus("Selecione um projeto primeiro."); return; }
+  await flushEdicao();   // garante que a última edição chegou no Python
+  const res = await pywebview.api.salvar_no_projeto(state.projeto, state.pendingSave);
+  if (res.ok) {
+    renderSavedList(state.projeto, res.transcricoes);
+    hideSaveBanner();
+    if (res.salvos.length && res.pulados.length) {
+      setStatus(`${res.salvos.length} salvo(s), ${res.pulados.length} já existia(m).`);
+    } else if (res.salvos.length) {
+      setStatus(`Salvo em "${state.projeto}".`);
+    } else {
+      setStatus("Nada novo para salvar — tudo já havia sido salvo.");
+    }
+    setTimeout(() => setStatus(""), 4000);
+  }
+}
+
+function descartarSalvar() { hideSaveBanner(); }
+
+function hideSaveBanner() {
+  document.getElementById("save-banner").classList.remove("visible");
+  state.pendingSave = [];
+}
+
+function showSaveBanner(paths) {
+  if (!state.projeto) return;
+  state.pendingSave = paths;
+  const n = paths.length;
+  document.getElementById("save-banner-text").innerHTML =
+    `Salvar ${n} transcrição${n>1?"ões":""} em <strong>${esc(state.projeto)}</strong>?`;
+  document.getElementById("save-banner").classList.add("visible");
+}
+
+// ── Callbacks do Python ───────────────────────────────────────────────
+
+function prepararTranscricao(path, nome) {
+  // Chamado antes do VAD/transcrição: abre a área de transcript imediatamente
+  // para o usuário ver que o app está funcionando (VAD pode levar minutos)
+  if (!state.selecionado) state.selecionado = path;
+  if (state.selecionado === path) {
+    document.getElementById("transcript-filename").textContent = nome;
+    const b = document.getElementById("transcript-body");
+    b.textContent = "";
+    showTranscriptArea();
+  }
+}
+
+function appendLinhas(path, novas) {
+  // Recebe apenas as linhas NOVAS desde o último update (não o texto inteiro)
+  if (!novas) return;
+  if (!state.selecionado) {
+    state.selecionado = path;
+    document.getElementById("transcript-filename").textContent = path.split("/").pop();
+    showTranscriptArea();
+  }
+  if (state.selecionado !== path) return;
+  const b = document.getElementById("transcript-body");
+  const curr = b.textContent;
+  b.textContent = curr ? curr + "\n" + novas : novas;
+  b.scrollTop = b.scrollHeight;
+}
+
+function setProgress(pct, status) {
+  document.getElementById("prog-fill").style.width = (pct * 100) + "%";
+  setStatus(status);
+}
+function setStatus(msg) { document.getElementById("status").textContent = msg; }
+function setQueueActive(idx) { renderFila(idx); }
+
+function updatePreview(path, texto) {
+  if (!state.selecionado) {
+    state.selecionado = path;
+    document.getElementById("transcript-filename").textContent = path.split("/").pop();
+    showTranscriptArea();
+  }
+  if (state.selecionado === path) {
+    const b = document.getElementById("transcript-body");
+    b.textContent = state.mostrarTimestamps ? texto : stripTimestamps(texto);
+    b.scrollTop = b.scrollHeight;
+  }
+}
+
+function addResult(path, nome, texto) {
+  state.resultados[path] = texto;
+  if (!state.selecionado) state.selecionado = path;
+  document.getElementById("results-section").style.display = "block";
+  renderResultsList();
+  if (state.selecionado === path) mostrarTranscricao(path);
+  showTranscriptArea();
+
+  const total = Object.keys(state.resultados).length;
+  // Exportar tudo a partir do 2º arquivo
+  document.getElementById("btn-exportar").style.display = total > 1 ? "inline-flex" : "none";
+  // SRT e locutores ficam disponíveis quando é o arquivo ativo
+  if (state.selecionado === path) {
+    document.getElementById("btn-srt").style.display = "inline-flex";
+    document.getElementById("btn-locutores").style.display = "inline-flex";
+    document.getElementById("btn-cortes").style.display = "inline-flex";
+  }
+  // troca de arquivo zera os cortes em tela
+  state.cortesSugeridos = [];
+  state.cortesSalvos = [];
+}
+
+function setTranscribing(val) {
+  state.transcrevendo = val;
+  const b = document.getElementById("btn-transcribe");
+  b.disabled = val;
+  b.textContent = val ? "Transcrevendo…" : "Transcrever";
+}
+
+async function onComplete(paths, filaRestante) {
+  // filaRestante traz o que entrou na fila durante a transcrição
+  state.fila = filaRestante || [];
+  renderFila();
+  updateDropzone();
+  if (!paths || !paths.length) return;
+  if (state.projeto) {
+    const novos = await pywebview.api.filtrar_nao_salvos(state.projeto, paths);
+    if (novos.length) showSaveBanner(novos);
+  } else {
+    showSaveBanner(paths);
+  }
+}
+
+// ── Render ────────────────────────────────────────────────────────────
+
+function renderFila(activeIdx) {
+  const el = document.getElementById("queue-list");
+  if (!state.fila.length) { el.innerHTML = '<span class="ph">Nenhum arquivo</span>'; return; }
+  el.innerHTML = state.fila.map((nome, i) =>
+    `<div class="q-item ${activeIdx===i?"active":""}">
+       <span class="q-dot"></span><span class="q-name">${esc(nome)}</span>
+     </div>`
+  ).join("");
+}
+
+function renderResultsList() {
+  const el    = document.getElementById("results-list");
+  const paths = Object.keys(state.resultados);
+  if (!paths.length) { el.innerHTML = ""; return; }
+  el.innerHTML = paths.map(p => {
+    const nome  = p.split("/").pop();
+    const ativo = p === state.selecionado;
+    return `<div class="file-item done ${ativo?"active":""}" data-path="${esc(p)}" title="${esc(nome)}">
+      <div class="file-badge">✓</div>
+      <span class="file-name">${esc(nome)}</span>
+    </div>`;
+  }).join("");
+}
+
+// delegação de cliques (itens da sessão e salvos)
+document.addEventListener("click", async e => {
+  // transcrição da sessão
+  const item = e.target.closest(".file-item[data-path]");
+  if (item) {
+    state.selecionado = item.dataset.path;
+    renderResultsList();
+    mostrarTranscricao(state.selecionado);
+    // exibe botão SRT para este arquivo
+    document.getElementById("btn-srt").style.display = "inline-flex";
+    document.getElementById("btn-timestamps").style.display = "inline-flex";
+    return;
+  }
+  // transcrição salva
+  const saved = e.target.closest(".file-item[data-saved]");
+  if (saved) {
+    const path = saved.dataset.saved;
+    state.selecionado = "saved:" + path;
+    renderResultsList();
+    renderSavedListActive();
+    const res = await pywebview.api.ler_transcricao(path);
+    if (res.ok) {
+      // a chave agora é "db:<id>", então o nome vem do próprio item da lista
+      const nome = saved.getAttribute("title") || path;
+      document.getElementById("transcript-filename").textContent =
+        nome + (res.status ? `  ·  ${res.status}` : "");
+      document.getElementById("transcript-body").textContent = res.texto || "";
+      document.getElementById("transcript-body").contentEditable = "false";
+      // esconde botões que só fazem sentido para transcrições da sessão
+      document.getElementById("btn-srt").style.display = "none";
+      document.getElementById("btn-locutores").style.display = "none";
+      document.getElementById("btn-cortes").style.display = "none";
+      document.getElementById("btn-timestamps").style.display = "none";
+      showTranscriptArea();
+    }
+  }
+});
+
+function renderSavedListActive() {
+  document.querySelectorAll(".file-item[data-saved]").forEach(el => {
+    el.classList.toggle("active", "saved:" + el.dataset.saved === state.selecionado);
+  });
+}
+
+function mostrarTranscricao(path) {
+  const texto = state.resultados[path] || "";
+  document.getElementById("transcript-filename").textContent = path.split("/").pop();
+  const b = document.getElementById("transcript-body");
+  b.textContent = state.mostrarTimestamps ? texto : stripTimestamps(texto);
+  // restaura editabilidade para transcrições da sessão
+  b.contentEditable = state.mostrarTimestamps ? "plaintext-only" : "false";
+}
+
+function showTranscriptArea() {
+  document.getElementById("dropzone").style.display = "none";
+  document.getElementById("transcript-area").style.display = "flex";
+}
+
+function updateDropzone() {
+  const hasContent = state.fila.length > 0 || Object.keys(state.resultados).length > 0;
+  if (!hasContent) {
+    document.getElementById("dropzone").style.display = "flex";
+    document.getElementById("transcript-area").style.display = "none";
+  }
+}
+
+function textoAtivo() {
+  if (!state.selecionado) return null;
+  if (state.selecionado.startsWith("saved:")) {
+    return document.getElementById("transcript-body").textContent || null;
+  }
+  const texto = state.resultados[state.selecionado] || null;
+  if (!texto) return null;
+  // respeita o toggle: sem timestamps = texto contínuo (melhor para legendas e IA)
+  return state.mostrarTimestamps ? texto : stripTimestamps(texto);
+}
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+// ── Atalhos de teclado ────────────────────────────────────────────────
+
+document.addEventListener("keydown", e => {
+  // permite atalhos dentro de campos de texto, exceto os globais abaixo
+  if (e.target.tagName === "INPUT" && e.key !== "Escape") return;
+
+  if (e.metaKey && !e.shiftKey && e.key === "Enter") {
+    e.preventDefault(); transcrever();
+  }
+  if (e.metaKey && e.shiftKey && e.key.toLowerCase() === "e") {
+    e.preventDefault(); exportarTodos();
+  }
+  if (e.metaKey && !e.shiftKey && e.key.toLowerCase() === "f") {
+    e.preventDefault(); toggleBusca();
+  }
+  if (e.metaKey && !e.shiftKey && e.key.toLowerCase() === "t") {
+    if (!state.selecionado || state.selecionado.startsWith("saved:")) return;
+    e.preventDefault(); toggleTimestamps();
+  }
+});
+
+// ── Drag & Drop ───────────────────────────────────────────────────────
+
+let dragCounter = 0;
+const overlay = document.getElementById("drag-overlay");
+
+document.addEventListener("dragenter", e => { e.preventDefault(); dragCounter++; overlay.classList.add("visible"); });
+document.addEventListener("dragleave", () => { if (--dragCounter <= 0) { dragCounter = 0; overlay.classList.remove("visible"); } });
+document.addEventListener("dragover",  e => e.preventDefault());
+document.addEventListener("drop", async e => {
+  e.preventDefault(); dragCounter = 0; overlay.classList.remove("visible");
+  const paths = Array.from(e.dataTransfer.files).map(f => f.path).filter(Boolean);
+  if (!paths.length) return;
+  const fila = await pywebview.api.adicionar_por_paths(paths);
+  state.fila = fila; renderFila(); updateDropzone();
+});
+</script>
+</body>
+</html>

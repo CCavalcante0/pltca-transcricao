@@ -1,0 +1,20 @@
+# Dependências reais do app (o arquivo antigo listava openai-whisper,
+# que nem é usado — o app roda em faster-whisper).
+#
+# Exige também o ffmpeg no PATH:  brew install ffmpeg
+# (usado para ler a duração dos vídeos, gravar o microfone em AAC
+#  e converter o áudio para 16 kHz na identificação de locutores)
+
+pywebview==6.2.1        # janela nativa + ponte JS<->Python
+faster-whisper==1.2.1   # transcrição local (modelo large-v3-turbo)
+sounddevice==0.5.5      # captura do microfone
+numpy==2.4.5            # buffers de áudio
+sherpa-onnx==1.13.5     # diarização: quem falou o quê
+
+# Modelos de diarização ficam em modelos/ e não vêm pelo pip:
+#   modelos/sherpa-onnx-pyannote-segmentation-3-0/model.onnx
+#   modelos/campplus.onnx
+# Baixe com:
+#   BASE=https://github.com/k2-fsa/sherpa-onnx/releases/download
+#   curl -L "$BASE/speaker-segmentation-models/sherpa-onnx-pyannote-segmentation-3-0.tar.bz2" | tar xj
+#   curl -L -o campplus.onnx "$BASE/speaker-recongition-models/3dspeaker_speech_campplus_sv_zh_en_16k-common_advanced.onnx"

@@ -1,0 +1,33 @@
+# ─── Dados de cliente — NUNCA versionar ───────────────────────────────
+# projetos/ tem transcrições de clientes
+# e gravacoes/ tem áudio bruto. Histórico de git não esquece.
+projetos/
+gravacoes/
+# o banco guarda as transcrições — mesmo peso das pastas acima
+*.db
+*.db-wal
+*.db-shm
+
+# ─── Pesado, cada máquina monta o seu ─────────────────────────────────
+venv/
+venv-*/
+# 34 MB de diarização, baixados na 1ª execução
+modelos/
+*.onnx
+*.tar.bz2
+
+# ─── Build ────────────────────────────────────────────────────────────
+build/
+dist/
+*.spec.bak
+*.app/
+
+# ─── Python ───────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# ─── macOS / editores ─────────────────────────────────────────────────
+.DS_Store
+.vscode/
+.idea/
