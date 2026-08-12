@@ -7,6 +7,7 @@ cortes já recortados em arquivo separado.
 Roda inteiro no seu computador: sem nuvem, sem mensalidade, sem limite de minutos.
 
 - Transcrição local com Whisper (`large-v3-turbo`)
+- **Link do YouTube** — cola a URL e ele baixa só o áudio direto para a fila
 - Identificação de locutor — separa entrevistado, adversário e mediador
 - **Sugestão de cortes** de 25 a 90s, com exportação dos vídeos via ffmpeg
 - Organização por cliente, com status de publicação por vídeo
@@ -67,10 +68,14 @@ o que já foi publicado. **Escolha antes de transcrever** — é o cliente ativo
 determina onde o vídeo vai ser registrado, e cortes só podem ser salvos com um
 cliente selecionado.
 
-### 2. Transcreva
+### 2. Traga o material
 
-Arraste os arquivos para a janela e clique em **Transcrever**. O texto aparece
-conforme vai saindo, com o tempo de cada fala.
+Arraste os arquivos para a janela, ou **cole um link do YouTube** no campo da
+barra lateral e dê Enter. Ele baixa **só o áudio** — uma entrevista de 75 minutos
+dá ~140 MB em vez de vários GB — e o título do vídeo já vira o nome no seu histórico.
+
+Depois clique em **Transcrever**. O texto aparece conforme vai saindo, com o tempo
+de cada fala.
 
 ### 3. Identifique quem falou — 🗣 Locutores
 

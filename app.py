@@ -203,6 +203,7 @@ class API:
         self.nomes_locutores = {}        # { path: {idx_locutor: "Roberto"} }
         self._diar_lock      = threading.Lock()
         self.video_ids       = {}        # { path da sessão: id no banco }
+        self.baixando        = False
         banco.iniciar()
         self.window        = None
         self._model_lock   = threading.Lock()
@@ -562,6 +563,65 @@ class API:
                 if os.path.splitext(p)[1].lower() in EXTENSOES and p not in self.fila:
                     self.fila.append(p)
         return [os.path.basename(p) for p in self.fila]
+
+    def adicionar_url(self, url):
+        """Baixa o áudio de um link (YouTube e afins) e põe na fila."""
+        url = (url or "").strip()
+        if not url.startswith(("http://", "https://")):
+            return {"ok": False, "msg": "Cole um link começando com http."}
+        if self.baixando:
+            return {"ok": False, "msg": "Já há um download em andamento."}
+        self.baixando = True
+        threading.Thread(target=self._baixar_url, args=(url,), daemon=True).start()
+        return {"ok": True}
+
+    def _baixar_url(self, url):
+        import re as _re
+        try:
+            self._js("setStatus", "Lendo o link…")
+            info = subprocess.run(
+                [sys.executable, "-m", "yt_dlp", "--no-playlist", "--skip-download",
+                 "--print", "%(id)s\t%(title)s\t%(duration)s", url],
+                capture_output=True, text=True, timeout=120)
+            if info.returncode != 0 or not info.stdout.strip():
+                erro = (info.stderr or "").strip().splitlines()
+                raise RuntimeError(erro[-1][:160] if erro else "não consegui ler o link")
+
+            vid_id, titulo, dur = (info.stdout.strip().split("\t") + ["", ""])[:3]
+            mins = f"{int(float(dur)) // 60} min" if dur.replace(".", "").isdigit() else "?"
+            self._js("setStatus", f"Baixando áudio: {titulo[:50]} ({mins})…")
+
+            # Só o áudio: um vídeo de 1h vira ~70 MB em vez de vários GB.
+            proc = subprocess.Popen(
+                [sys.executable, "-m", "yt_dlp", "--no-playlist", "--newline",
+                 "-x", "--audio-format", "m4a",
+                 "-o", str(GRAVACOES_DIR / "%(title).80B [%(id)s].%(ext)s"), url],
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+
+            pct_re = _re.compile(r"\[download\]\s+([\d.]+)%")
+            for linha in proc.stdout:
+                m = pct_re.search(linha)
+                if m:
+                    p = float(m.group(1)) / 100
+                    self._js("setProgress", p, f"Baixando {titulo[:44]} — {int(p * 100)}%")
+            proc.wait()
+
+            achados = sorted(GRAVACOES_DIR.glob(f"*[[]{vid_id}[]].m4a"))
+            if proc.returncode != 0 or not achados:
+                raise RuntimeError("o download falhou")
+
+            caminho = str(achados[0])
+            if caminho not in self.fila:
+                self.fila.append(caminho)
+
+            self._js("setProgress", 1.0, f"Baixado: {os.path.basename(caminho)}")
+            self._js("onDownload", [os.path.basename(p) for p in self.fila])
+
+        except Exception as e:
+            self._js("setStatus", f"Erro no link: {str(e).splitlines()[0][:140]}")
+            self._js("onDownload", None)
+        finally:
+            self.baixando = False
 
     def adicionar_por_paths(self, paths):
         for p in paths:

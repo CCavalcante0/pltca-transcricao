@@ -10,6 +10,8 @@ faster-whisper==1.2.1   # transcrição local (modelo large-v3-turbo)
 sounddevice==0.5.5      # captura do microfone
 numpy==2.4.5            # buffers de áudio
 sherpa-onnx==1.13.5     # diarização: quem falou o quê
+yt-dlp                  # baixar áudio de link (YouTube etc) — sem pin: o
+                        # site muda e versão velha para de funcionar
 
 # Modelos de diarização ficam em modelos/ e não vêm pelo pip:
 #   modelos/sherpa-onnx-pyannote-segmentation-3-0/model.onnx

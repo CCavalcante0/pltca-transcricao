@@ -572,6 +572,13 @@ body {
     <div class="sidebar-scroll">
 
       <!-- Fila -->
+      <!-- Link do YouTube: cola e dá Enter -->
+      <div style="padding:2px 10px 8px; flex-shrink:0; position:relative; z-index:1;">
+        <input class="inp-projeto" id="inp-url" style="width:100%; border-width:1px;
+               border-color:var(--sep);" placeholder="Colar link do YouTube…"
+               onkeydown="if(event.key==='Enter')baixarDoLink()"/>
+      </div>
+
       <div id="queue-section">
         <div class="sec-label">Na fila</div>
         <div class="file-list" id="queue-list">
@@ -884,6 +891,26 @@ async function pararGravacao() {
 }
 
 // ── Fila ──────────────────────────────────────────────────────────────
+
+async function baixarDoLink() {
+  const inp = document.getElementById("inp-url");
+  const url = inp.value.trim();
+  if (!url) return;
+  const res = await pywebview.api.adicionar_url(url);
+  if (!res.ok) { setStatus(res.msg || "não deu"); return; }
+  inp.value = "";
+  inp.disabled = true;
+}
+
+// chamado pelo Python quando o download termina
+function onDownload(fila) {
+  document.getElementById("inp-url").disabled = false;
+  if (!fila) return;
+  state.fila = fila;
+  renderFila();
+  updateDropzone();
+  setTimeout(() => setStatus(""), 4000);
+}
 
 async function adicionarArquivos() {
   const fila = await pywebview.api.selecionar_arquivos();
