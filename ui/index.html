@@ -7,61 +7,84 @@
 <style>
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
 
+/* Sora local, não por CDN: o app tem que abrir igual sem internet. */
+@font-face {
+  font-family: 'Sora'; font-style: normal; font-weight: 400;
+  font-display: swap; src: url('fonts/sora-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Sora'; font-style: normal; font-weight: 600;
+  font-display: swap; src: url('fonts/sora-600.woff2') format('woff2');
+}
+
+/* Paleta do enxoval PLTCA_ v1.3.
+   REGRA DE OURO: o coral (#D85A30) é exclusivo de cursor e microdestaque.
+   Por isso ele NÃO é --acao (que pinta todo botão); o primário é o grafite.
+   --blue continua existindo como apelido de --acao só para não ter que
+   reescrever 40 usos espalhados no arquivo. */
 :root {
-  --blue:   #007AFF;
-  --blue-h: #0066D6;
-  --green:  #34C759;
-  --red:    #FF3B30;
+  --papel:   #F7F5F0;
+  --grafite: #1E1E1C;
+  --coral:   #D85A30;
 
-  --glass:      rgba(255,255,255,0.62);
-  --glass-edge: rgba(255,255,255,0.88);
-  --glass-top:  rgba(255,255,255,0.96);
-  --glass-blur: blur(28px) saturate(180%);
-  --shadow:     0 8px 32px rgba(0,0,0,0.09), 0 2px 6px rgba(0,0,0,0.05);
+  --acao:   var(--grafite);
+  --blue:   var(--acao);
+  --blue-h: #3A3A36;
+  --green:  #4F7A52;
+  --red:    #D93A2B;
 
-  --t1:  rgba(0,0,0,0.88);
-  --t2:  rgba(0,0,0,0.52);
-  --t3:  rgba(0,0,0,0.28);
-  --sep: rgba(0,0,0,0.07);
-  --r:   16px; --rs: 10px; --p: 999px;
+  --glass:      rgba(255,255,255,0.72);
+  --glass-edge: #DCD7CC;
+  --glass-top:  rgba(255,255,255,0.94);
+  --glass-blur: blur(20px) saturate(115%);
+  --shadow:     0 6px 24px rgba(30,30,28,0.08), 0 1px 3px rgba(30,30,28,0.05);
+
+  --t1:  rgba(30,30,28,0.92);
+  --t2:  rgba(30,30,28,0.55);
+  --t3:  rgba(30,30,28,0.30);
+  --sep: rgba(30,30,28,0.10);
+  --r:   12px; --rs: 8px; --p: 999px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --glass:      rgba(30,30,34,0.70);
-    --glass-edge: rgba(255,255,255,0.11);
-    --glass-top:  rgba(255,255,255,0.08);
+    --papel:   #141412;
+    --acao:    #E8E4DC;          /* no escuro o primário inverte, o coral não */
+    --blue-h:  #FFFFFF;
+    --glass:      rgba(28,28,26,0.74);
+    --glass-edge: rgba(255,255,255,0.10);
+    --glass-top:  rgba(255,255,255,0.07);
     --shadow:     0 8px 32px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.25);
-    --t1: rgba(255,255,255,0.92);
-    --t2: rgba(255,255,255,0.50);
-    --t3: rgba(255,255,255,0.22);
-    --sep: rgba(255,255,255,0.08);
+    --t1: rgba(243,241,236,0.94);
+    --t2: rgba(243,241,236,0.52);
+    --t3: rgba(243,241,236,0.24);
+    --sep: rgba(243,241,236,0.09);
   }
 }
 
 html, body {
   height: 100%; overflow: hidden;
-  font-family: -apple-system, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  font-family: 'Sora', system-ui, -apple-system, sans-serif;
   font-size: 13px; line-height: 1.5;
   color: var(--t1); user-select: none;
 }
 
+/* O coral aparece só aqui: foco, corte marcado e gravação em curso. */
+:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
+
+/* Papel, não arco-íris. A marca é contida: superfície neutra e um respiro
+   de coral bem diluído num canto, só para o fundo não ser chapado. */
 body {
-  background-color: #dde8ff;
+  background-color: var(--papel);
   background-image:
-    radial-gradient(ellipse 75% 65% at 12% 18%,  rgba(160,195,255,0.75) 0%, transparent 55%),
-    radial-gradient(ellipse 55% 55% at 88% 82%,  rgba(190,155,255,0.60) 0%, transparent 55%),
-    radial-gradient(ellipse 65% 45% at 55% 45%,  rgba(255,210,235,0.45) 0%, transparent 55%),
-    radial-gradient(ellipse 40% 60% at 80% 20%,  rgba(145,220,255,0.40) 0%, transparent 50%);
+    radial-gradient(ellipse 70% 55% at 88% 8%,  rgba(216,90,48,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 60% at 8% 92%,  rgba(30,30,28,0.05) 0%, transparent 60%);
 }
 @media (prefers-color-scheme: dark) {
   body {
-    background-color: #0b0d18;
     background-image:
-      radial-gradient(ellipse 75% 65% at 12% 18%,  rgba(30,55,120,0.80) 0%, transparent 55%),
-      radial-gradient(ellipse 55% 55% at 88% 82%,  rgba(65,30,110,0.70) 0%, transparent 55%),
-      radial-gradient(ellipse 65% 45% at 55% 45%,  rgba(100,25,60,0.45) 0%, transparent 55%),
-      radial-gradient(ellipse 40% 60% at 80% 20%,  rgba(20,80,110,0.50) 0%, transparent 50%);
+      radial-gradient(ellipse 70% 55% at 88% 8%,  rgba(216,90,48,0.13) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 60% at 8% 92%,  rgba(243,241,236,0.04) 0%, transparent 60%);
   }
 }
 
@@ -138,15 +161,15 @@ body {
 
 .btn-icon {
   width: 28px; height: 28px; flex-shrink: 0;
-  background: rgba(0,122,255,0.12);
-  border: 1px solid rgba(0,122,255,0.25);
+  background: rgba(30,30,28,0.12);
+  border: 1px solid rgba(30,30,28,0.25);
   border-radius: var(--p);
   color: var(--blue);
   font-size: 14px; line-height: 1;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   transition: background .12s;
 }
-.btn-icon:hover { background: rgba(0,122,255,0.20); }
+.btn-icon:hover { background: rgba(30,30,28,0.20); }
 
 /* input novo projeto */
 .novo-projeto-row {
@@ -230,7 +253,7 @@ body {
   color: var(--t2); font-size: 12px;
 }
 .file-item:hover { background: rgba(120,120,128,0.10); color: var(--t1); }
-.file-item.active { background: rgba(0,122,255,0.13); color: var(--blue); }
+.file-item.active { background: rgba(30,30,28,0.13); color: var(--blue); }
 .file-item.done   { color: var(--t1); }
 
 .file-badge {
@@ -240,7 +263,7 @@ body {
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; font-size: 10px;
 }
-.file-item.active .file-badge { background: rgba(0,122,255,0.15); border-color: rgba(0,122,255,0.3); }
+.file-item.active .file-badge { background: rgba(30,30,28,0.15); border-color: rgba(30,30,28,0.3); }
 .file-item.done   .file-badge { background: rgba(52,199,89,0.12);  border-color: rgba(52,199,89,0.3); color: var(--green); font-size: 11px; }
 .file-item.saved  .file-badge { background: rgba(52,199,89,0.18);  border-color: rgba(52,199,89,0.4); color: var(--green); font-size: 11px; }
 
@@ -275,8 +298,8 @@ body {
 }
 .dz-icon {
   width: 68px; height: 68px; border-radius: 20px;
-  background: rgba(0,122,255,0.10); border: 1px solid rgba(0,122,255,0.22);
-  box-shadow: inset 0 1.5px 0 rgba(255,255,255,0.5), 0 6px 20px rgba(0,122,255,0.12);
+  background: rgba(30,30,28,0.10); border: 1px solid rgba(30,30,28,0.22);
+  box-shadow: inset 0 1.5px 0 rgba(255,255,255,0.5), 0 6px 20px rgba(30,30,28,0.12);
   display: flex; align-items: center; justify-content: center;
   font-size: 30px; margin-bottom: 6px;
 }
@@ -303,8 +326,8 @@ body {
 }
 .btn-pill:hover { background: rgba(120,120,128,0.20); color: var(--t1); }
 .btn-pill.active {
-  background: rgba(0,122,255,0.15); color: var(--blue);
-  border-color: rgba(0,122,255,0.30);
+  background: rgba(30,30,28,0.15); color: var(--blue);
+  border-color: rgba(30,30,28,0.30);
 }
 
 /* ── Barra de busca ── */
@@ -349,7 +372,7 @@ body {
 .loc-chip {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 3px 9px; border-radius: var(--p);
-  background: rgba(0,122,255,0.10); border: 1px solid rgba(0,122,255,0.22);
+  background: rgba(30,30,28,0.10); border: 1px solid rgba(30,30,28,0.22);
 }
 .loc-chip input {
   border: none; background: transparent; outline: none;
@@ -357,6 +380,16 @@ body {
   font-weight: 550; width: 74px;
 }
 .loc-chip span { font-size: 10.5px; color: var(--t3); white-space: nowrap; }
+
+/* ── Marca ── */
+.marca {
+  height: 15px; width: auto; display: block; margin-bottom: 9px;
+  opacity: .92;
+}
+@media (prefers-color-scheme: dark) {
+  /* a logo é grafite sólido; no escuro inverte em vez de sumir */
+  .marca { filter: invert(1) brightness(1.9); opacity: .88; }
+}
 
 /* ── Painel de cortes ── */
 .cortes-bar {
@@ -376,13 +409,13 @@ body {
 }
 .corte-item:hover { background: rgba(120,120,128,0.15); }
 .corte-item.marcado {
-  background: rgba(52,199,89,0.12); border-color: rgba(52,199,89,0.32);
+  background: rgba(216,90,48,0.10); border-color: rgba(216,90,48,0.34);
 }
 .corte-marca {
   font-size: 13px; line-height: 1.3; width: 16px; flex-shrink: 0;
   color: var(--t3);
 }
-.corte-item.marcado .corte-marca { color: var(--green); }
+.corte-item.marcado .corte-marca { color: var(--coral); }
 .corte-corpo { flex: 1; min-width: 0; }
 .corte-tempo {
   font-size: 11.5px; font-variant-numeric: tabular-nums;
@@ -432,7 +465,7 @@ body {
   background: var(--blue); color: #fff;
   border: none; font-size: 12px; font-weight: 600;
   font-family: inherit; cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,122,255,0.28);
+  box-shadow: 0 2px 8px rgba(30,30,28,0.28);
   transition: filter .1s;
 }
 .btn-salvar:hover { filter: brightness(1.08); }
@@ -460,7 +493,7 @@ body {
   background: var(--blue); color: #fff; border: none;
   border-radius: var(--p); font-size: 15px; font-weight: 700;
   font-family: inherit; cursor: pointer; letter-spacing: -.15px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 4px 18px rgba(0,122,255,0.32);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 4px 18px rgba(30,30,28,0.32);
   transition: filter .12s, transform .1s, opacity .15s;
 }
 .btn-transcribe:hover:not(:disabled) { filter: brightness(1.07); }
@@ -470,14 +503,14 @@ body {
 /* ── Drag overlay ── */
 .drag-overlay {
   display: none; position: fixed; inset: 0; z-index: 999;
-  background: rgba(0,122,255,0.06); border: 2px dashed rgba(0,122,255,0.45);
+  background: rgba(30,30,28,0.06); border: 2px dashed rgba(30,30,28,0.45);
   border-radius: 20px; margin: 8px;
   align-items: center; justify-content: center; flex-direction: column; gap: 8px;
   pointer-events: none; backdrop-filter: blur(6px) saturate(140%);
 }
 .drag-overlay.visible { display: flex; }
 .drag-overlay-title { font-size: 18px; font-weight: 700; color: var(--blue); letter-spacing: -.25px; }
-.drag-overlay-sub   { font-size: 12px; color: rgba(0,122,255,.60); }
+.drag-overlay-sub   { font-size: 12px; color: rgba(30,30,28,.60); }
 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -497,8 +530,9 @@ body {
   <aside class="sidebar glass">
 
     <div class="sidebar-top">
+      <img class="marca" src="pltca.svg" alt="PLTCA_"/>
       <div class="app-name">Transcrição</div>
-      <div class="app-sub">Whisper · 100% local</div>
+      <div class="app-sub">100% local · sem limite de minutos</div>
     </div>
 
     <div class="sep-line"></div>

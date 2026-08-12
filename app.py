@@ -1120,7 +1120,7 @@ def main():
         width=860,
         height=660,
         min_size=(720, 540),
-        background_color="#dde8ff",
+        background_color="#F7F5F0",     # papel PLTCA_
     )
     api.window = window
     webview.start(debug=False)
