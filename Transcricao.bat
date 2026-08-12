@@ -9,5 +9,8 @@ if not exist "venv\Scripts\pythonw.exe" (
     exit /b 1
 )
 
+REM bin\ primeiro, caso o ffmpeg tenha sido baixado para a pasta do projeto
+set "PATH=%~dp0bin;%PATH%"
+
 REM pythonw abre sem janela preta de console atras do app
 start "" "venv\Scripts\pythonw.exe" app.py

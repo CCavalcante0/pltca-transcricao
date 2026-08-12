@@ -13,6 +13,8 @@ venv/
 venv-*/
 # 34 MB de diarização, baixados na 1ª execução
 modelos/
+# ffmpeg estático, baixado só quando a máquina não tem um
+bin/
 *.onnx
 *.tar.bz2
 

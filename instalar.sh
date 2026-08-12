@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
 # Instalador do app de transcrição — macOS e Linux.
 # Rode uma vez:  ./instalar.sh
+#
+# Numa máquina zerada, sem Homebrew e sem Python, ele resolve tudo sozinho
+# e sem pedir senha: o uv baixa um Python próprio e o ffmpeg vem como
+# binário estático dentro da pasta do projeto.
 set -euo pipefail
 
 cd "$(dirname "$0")"
+PROJETO="$(pwd)"
+BIN="$PROJETO/bin"
+export PATH="$BIN:$PATH"
+
 echo "════════════════════════════════════════════"
 echo "  Transcrição PLTCA_ — instalação"
 echo "════════════════════════════════════════════"
@@ -18,41 +26,60 @@ for cand in python3.14 python3.13 python3.12 python3.11 python3; do
   fi
 done
 
+UV=""
 if [ -z "$PY" ]; then
-  echo "✗ Python 3.10 ou mais novo não encontrado."
-  echo
-  echo "  macOS:  brew install python"
-  echo "  Ubuntu: sudo apt install python3 python3-venv"
-  exit 1
+  echo "→ Python 3.10+ não encontrado. Baixando um com o uv (sem senha, sem Homebrew)…"
+  UV="$(command -v uv || true)"
+  [ -z "$UV" ] && [ -x "$HOME/.local/bin/uv" ] && UV="$HOME/.local/bin/uv"
+  if [ -z "$UV" ]; then
+    curl -LsSf https://astral.sh/uv/install.sh | sh >/dev/null 2>&1 || true
+    UV="$HOME/.local/bin/uv"
+  fi
+  if [ ! -x "$UV" ]; then
+    echo "✗ Não consegui instalar o uv. Instale o Python manualmente:"
+    echo "    https://python.org/downloads"
+    exit 1
+  fi
+  echo "✓ uv pronto"
+else
+  echo "✓ Python: $($PY --version)"
 fi
-echo "✓ Python: $($PY --version)"
 
 # ── 2. ffmpeg ────────────────────────────────────────────────────────
 if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
-  echo "→ ffmpeg não encontrado, instalando…"
-  if command -v brew >/dev/null 2>&1; then
-    brew install ffmpeg
+  if [ "$(uname)" = "Darwin" ]; then
+    # Binário estático na pasta do projeto: não precisa de Homebrew nem senha.
+    case "$(uname -m)" in
+      arm64) SUF="9arm" ;;
+      *)     SUF="80intel" ;;
+    esac
+    echo "→ ffmpeg não encontrado, baixando build estático ($(uname -m))…"
+    mkdir -p "$BIN"
+    for b in ffmpeg ffprobe; do
+      curl -sSL --retry 2 -o "/tmp/$b.zip" "https://www.osxexperts.net/${b}${SUF}.zip"
+      unzip -qo "/tmp/$b.zip" -d "$BIN" -x '__MACOSX/*'
+      rm -f "/tmp/$b.zip"
+      chmod +x "$BIN/$b"
+      xattr -d com.apple.quarantine "$BIN/$b" 2>/dev/null || true
+    done
   elif command -v apt >/dev/null 2>&1; then
     sudo apt update && sudo apt install -y ffmpeg
   else
-    # Mac recém-formatado não tem Homebrew. Não instalo por conta — é uma
-    # mudança grande no sistema — mas deixo o comando pronto para colar.
-    echo "✗ Falta o ffmpeg, e não achei Homebrew nem apt para instalar."
-    echo
-    echo "  No macOS, cole estes dois comandos e rode o instalador de novo:"
-    echo
-    echo '    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
-    echo "    brew install ffmpeg"
-    echo
+    echo "✗ Instale o ffmpeg manualmente e rode de novo."
     exit 1
   fi
 fi
+command -v ffmpeg >/dev/null 2>&1 || { echo "✗ ffmpeg ainda indisponível."; exit 1; }
 echo "✓ ffmpeg: $(ffmpeg -version | head -1 | cut -d' ' -f3)"
 
 # ── 3. Ambiente virtual ──────────────────────────────────────────────
 if [ ! -d venv ]; then
   echo "→ Criando ambiente virtual…"
-  "$PY" -m venv venv
+  if [ -n "$PY" ]; then
+    "$PY" -m venv venv
+  else
+    "$UV" venv --seed --python 3.12 venv
+  fi
 fi
 echo "✓ Ambiente virtual pronto"
 
@@ -73,7 +100,7 @@ echo "✓ Modelos de locutor prontos"
 # ── 5. Atalho na Mesa (só macOS) ─────────────────────────────────────
 ABRIR="./abrir.sh"
 if [ "$(uname)" = "Darwin" ]; then
-  bash "$(dirname "$0")/build_app.sh" && ABRIR="o ícone Transcrição na sua Mesa"
+  bash "$PROJETO/build_app.sh" && ABRIR="o ícone Transcrição na sua Mesa"
 fi
 
 echo

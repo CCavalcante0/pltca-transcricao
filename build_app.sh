@@ -23,7 +23,8 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 # clicar no ícone sem abrir Terminal.
 cat > "$APP/Contents/MacOS/$NOME" <<LAUNCHER
 #!/bin/bash
-export PATH="/opt/homebrew/bin:/usr/local/bin:\$PATH"
+# bin/ primeiro: é onde fica o ffmpeg estático em máquina sem Homebrew.
+export PATH="$PROJETO/bin:/opt/homebrew/bin:/usr/local/bin:\$PATH"
 exec "$PROJETO/venv/bin/python" "$PROJETO/app.py"
 LAUNCHER
 chmod +x "$APP/Contents/MacOS/$NOME"
