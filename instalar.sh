@@ -70,11 +70,17 @@ garantir_modelos_diarizacao(progresso_console())
 "
 echo "✓ Modelos de locutor prontos"
 
+# ── 5. Atalho na Mesa (só macOS) ─────────────────────────────────────
+ABRIR="./abrir.sh"
+if [ "$(uname)" = "Darwin" ]; then
+  bash "$(dirname "$0")/build_app.sh" && ABRIR="o ícone Transcrição na sua Mesa"
+fi
+
 echo
 echo "════════════════════════════════════════════"
 echo "  Instalação concluída."
 echo
-echo "  Para abrir:  ./abrir.sh"
+echo "  Para abrir:  $ABRIR"
 echo
 echo "  Na primeira transcrição ele baixa o modelo"
 echo "  do Whisper (1,5 GB). Isso acontece uma vez só."
