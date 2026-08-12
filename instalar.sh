@@ -35,8 +35,15 @@ if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; 
   elif command -v apt >/dev/null 2>&1; then
     sudo apt update && sudo apt install -y ffmpeg
   else
-    echo "✗ Instale o ffmpeg manualmente e rode de novo."
-    echo "  macOS: instale o Homebrew em https://brew.sh e depois: brew install ffmpeg"
+    # Mac recém-formatado não tem Homebrew. Não instalo por conta — é uma
+    # mudança grande no sistema — mas deixo o comando pronto para colar.
+    echo "✗ Falta o ffmpeg, e não achei Homebrew nem apt para instalar."
+    echo
+    echo "  No macOS, cole estes dois comandos e rode o instalador de novo:"
+    echo
+    echo '    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+    echo "    brew install ffmpeg"
+    echo
     exit 1
   fi
 fi
