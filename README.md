@@ -40,7 +40,9 @@ e rodar de novo. Só acontece nessa primeira vez.
 
 ### Abrir
 
-- **macOS / Linux:** `./abrir.sh`
+- **macOS:** clique duas vezes no ícone **Transcrição** na sua Mesa
+  (o instalador põe ele lá). Pelo Terminal também vale: `./abrir.sh`
+- **Linux:** `./abrir.sh`
 - **Windows:** clique duas vezes em `Transcricao.bat`
 
 ### Requisitos

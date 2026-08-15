@@ -100,7 +100,7 @@ echo "✓ Modelos de locutor prontos"
 # ── 5. Atalho na Mesa (só macOS) ─────────────────────────────────────
 ABRIR="./abrir.sh"
 if [ "$(uname)" = "Darwin" ]; then
-  bash "$PROJETO/build_app.sh" && ABRIR="o 'Abrir Transcrição' na sua Mesa"
+  bash "$PROJETO/build_app.sh" && ABRIR="o ícone Transcrição na sua Mesa"
 fi
 
 echo
